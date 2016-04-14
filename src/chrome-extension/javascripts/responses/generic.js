@@ -16,8 +16,6 @@ GenericResponse.prototype = {
   }
 };
 
-
-
 /**
  * Iterate over the response handlers and coose the correct one to
  * handle an incoming message on the clients.
@@ -36,10 +34,10 @@ function genericRespHandler (msg, request, done) {
   }
 
   var responseTypesArr = [
-    require('./error.js'),                  //Catch the errors first
+    require('./error.js'),                  // Catch the errors first
     require('./burst.js'),
     require('./arguments.js'),
-    require('./ack.js'),
+    require('./ack.js')
   ];
 
   if (!responseTypesArr.some(function (RT) {

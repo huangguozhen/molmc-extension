@@ -190,6 +190,7 @@ MethodRequest.maybeHandle = function (msg, connections, hostApi, sendRespRaw) {
   }
 
   // We know this method wont bring up a callback.
+  /* eslint no-unreachable: 0 */
   if (msg.noCallback) {
     new AckResponse().send(_sendRespRaw);
     return true;

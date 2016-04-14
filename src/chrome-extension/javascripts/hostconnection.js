@@ -21,6 +21,7 @@
  * @license
  */
 
+/* eslint no-unused-vars: 0 */
 var Arguments = require('./arguments.js').Arguments,
     MethodRequest = require('./requests.js').MethodRequest,
     ApiEventEmitter = require("./apieventemitter.js").ApiEventEmitter,
@@ -92,7 +93,7 @@ function HostConnection (port, hostApi, closeCb) {
 
 HostConnection.prototype = {
   repr: function () {
-    return this.id +  " ( " + this.methodRequest.method + " )";
+    return this.id + " ( " + this.methodRequest.method + " )";
   },
 
   /**
@@ -132,11 +133,11 @@ HostConnection.prototype = {
     }
 
     // We expect they wont contain a function.
-    if (!this.apiEvent.firstResponseMsg){
+    if (!this.apiEvent.firstResponseMsg) {
       this.apiEvent.firstResponseMsg = reqMsg;
     }
 
-    if (this.buffer.length == 0){
+    if (this.buffer.length == 0) {
       // To the end of the queue.
       setImmediate(this.setDtr.bind(this));
     }
@@ -150,9 +151,9 @@ HostConnection.prototype = {
    */
   setDtr: function () {
     // This might be lef over on the queue.
-    if (this.port)
-      this.port.postMessage({timestamp: this.buffer.timestamp,
-                             connection: this.id});
+    if (this.port) {
+      this.port.postMessage({timestamp: this.buffer.timestamp, connection: this.id});
+    }
   },
 
   /**

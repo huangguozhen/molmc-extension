@@ -6,7 +6,7 @@
 
 function ChromeMessaging () {
   this.version = chrome.runtime.getManifest ?
-    chrome.runtime.getManifest().version : "1" ;
+    chrome.runtime.getManifest().version : "1";
   this.onConnectExternal = chrome.runtime.onConnectExternal;
   this.onMessageExternal = chrome.runtime.onMessageExternal;
   this.sendMessage = chrome.runtime.sendMessage.bind(chrome.runtime);

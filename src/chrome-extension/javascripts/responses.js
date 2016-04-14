@@ -13,5 +13,4 @@ module.exports.ErrResponse = require('./responses/error.js');
 module.exports.BurstResponse = require('./responses/burst.js');
 module.exports.ArgsResponse = require('./responses/arguments.js');
 module.exports.AckResponse = require('./responses/ack.js');
-module.exports.genericRespHandler =
-	require('./responses/generic.js').genericRespHandler;
+module.exports.genericRespHandler = require('./responses/generic.js').genericRespHandler;

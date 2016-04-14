@@ -65,26 +65,27 @@ BurstResponse.maybeHandle = function (msg, request, doneCb) {
   // packets that have everything in common except the data field.
   function maybeConcatData(msgs) {
     var dataSources = {},
-        concatArg = msgs.forEach(function (m, i) {
-          // Just keep this one as is
-          if (!(m.args && DataArgument.canWrap(m.args[0]) && m.args.length == 1)) {
-            dataSources[i] = m;
-            return;
-          }
+      /* eslint no-unused-vars: 0 */
+      concatArg = msgs.forEach(function (m, i) {
+        // Just keep this one as is
+        if (!(m.args && DataArgument.canWrap(m.args[0]) && m.args.length == 1)) {
+          dataSources[i] = m;
+          return;
+        }
 
-          // Mask the data to make a source-unique token.
-          var arg = m.args[0], backup = arg.data;
-          arg.data = null;
-          var token = JSON.stringify(arg);
-          arg.data = backup;
-          var ret = dataSources[token];
-          if (ret) {
-            dataSources[token] = ret.concat(arg);
-            return;
-          }
+        // Mask the data to make a source-unique token.
+        var arg = m.args[0], backup = arg.data;
+        arg.data = null;
+        var token = JSON.stringify(arg);
+        arg.data = backup;
+        var ret = dataSources[token];
+        if (ret) {
+          dataSources[token] = ret.concat(arg);
+          return;
+        }
 
-          dataSources[token] = new DataArgument(arg);
-        });
+        dataSources[token] = new DataArgument(arg);
+      });
 
     return Object.getOwnPropertyNames(dataSources).map(function (k) {
       var concatArg = dataSources[k];

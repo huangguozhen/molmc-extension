@@ -36,7 +36,7 @@ ErrResponse.maybeHandle = function (msg, request, doneCb) {
   var withError = function (err, cb) {
     cb();
 
-    if (err){
+    if (err) {
       console.error("Uncaught:", err);
     }
   };

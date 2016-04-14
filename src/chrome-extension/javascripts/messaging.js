@@ -1,4 +1,4 @@
-(function (global){
+(function (global) {
 var DummyRuntime = require('./messaging/dummy.js').DummyRuntime,
     ChromeMessaging = require('./messaging/chrome.js').ChromeMessaging;
 
@@ -25,4 +25,4 @@ if (!global.chrome ||
 
 module.exports = new (interfaces[global.MESSAGING_METHOD || 'chrome'])();
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})

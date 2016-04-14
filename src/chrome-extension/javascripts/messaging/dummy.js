@@ -1,4 +1,4 @@
-(function (global){
+(function (global) {
 // XXX: If disconnect is too soon after the connect the actual
 // connection may happen before disconnect.
 
@@ -13,10 +13,10 @@ global.APP_ID = global.APP_ID || "fakehostid";
 // stackDebug: non async messaging.
 var DEBUG = false, stackDebug = false;
 var assert = require('assert'),
-    maybeAsync = stackDebug ? function (cb) {cb();} : function (cb) {
+    maybeAsync = stackDebug ? function (cb) { cb(); } : function (cb) {
       var err = new Error("Stack before async message");
       setTimeout(function () {
-        try{
+        try {
           cb();
         } catch (e) {
           console.log(e.stack);
@@ -50,7 +50,7 @@ function Event (jsonOnly, name, buffered) {
       return JSON.parse(JSON.stringify(args));
     };
   } else {
-    this.wrap = function (a) {return a;};
+    this.wrap = function (a) { return a; };
   }
 }
 
@@ -60,7 +60,7 @@ Event.prototype = {
     var self = this;
     this.listeners = this.listeners.concat([cb]);
 
-    (this.buffer||[]).forEach(function (args) {
+    (this.buffer || []).forEach(function (args) {
       maybeAsync(function () {
         self.listeners.some(function (l) {
           return !l.apply(null, args);
@@ -71,7 +71,7 @@ Event.prototype = {
 
   removeListener: function (cb) {
     dbg('Removing listner: ' + cb.id + " from " + this.name +
-        " (" + this.listeners.map(function (l) {return l.id;}) + " - " +
+        " (" + this.listeners.map(function (l) { return l.id; }) + " - " +
         this.removed + " )");
     this.listeners = this.listeners.filter(function (l) {
       var same = cb === l,
@@ -80,10 +80,11 @@ Event.prototype = {
     });
   },
 
+  /* eslint no-unused-vars: 0 */
   trigger: function (varArgs) {
     var args = [].slice.call(arguments),
         self = this,
-        listeners = this.listeners; //Make sure async does't fuck with listeners
+        listeners = this.listeners; // Make sure async does't fuck with listeners
     dbg('Triggering[' + this.listeners.length + ']: ' + this.name + "|" +
         ((args[0] instanceof Port) ? "<port>" : JSON.stringify(args)));
 
@@ -136,7 +137,7 @@ Runtime.prototype = {
     assert.equal(hostId, this.id);
 
     if (global.blockMessaging) {
-      setImmediate( function () {
+      setImmediate(function () {
         clientPort.onDisconnect.trigger(clientPort);
       });
       return clientPort;
@@ -176,7 +177,7 @@ Port.prototype = {
 
       this.connected = false;
       this.onMessage.listeners = [];
-      if (forceListeners){
+      if (forceListeners) {
         this.onDisconnect.trigger();
       }
       this.onDisconnect.listeners = [];
@@ -191,4 +192,4 @@ module.exports.DummyRuntime = Runtime;
 module.exports.Event = Event;
 module.exports.Port = Port;
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})

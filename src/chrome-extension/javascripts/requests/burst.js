@@ -9,6 +9,8 @@
  * @name burstrequest.js
  * @author Chris Perivolaropoulos
  */
+
+/* eslint no-unused-vars: 0 */
 var Arguments = require('./../arguments.js').Arguements,
     log = new (require('./../log.js').Log)('burstrequest'),
     GenericRequest = require('./generic.js').GenericRequest,
@@ -43,7 +45,7 @@ function BurstRequest (hostId, connection, callback) {
  * @return {Boolean} True if we handled it.
  */
 BurstRequest.maybeHandle = function (msg, connections, sendRespRaw) {
-  if (msg.requestType !=  "BurstRequest") {
+  if (msg.requestType != "BurstRequest") {
     return false;
   };
   var usefulCons = connections.filter(function (c) {

@@ -19,7 +19,6 @@ var util = require("./util"),
     Arguments = require('./arguments.js').Arguments,
     log = new (require('./log.js').Log)('apieventemitter');
 
-
 /**
  * Response methods to inject in an api depending on the closing type.
  */
@@ -84,6 +83,8 @@ var closingResponses = {
   serial: function (closingRequest) {
     var oldfap = this.reverser.firstArgPath = 'connectionId';
     return closingResponses.firstResponse(closingRequest);
+
+    /* eslint no-unreachable: 0 */
     this.reverser.firstArgPath = oldfap;
   },
 
@@ -93,7 +94,6 @@ var closingResponses = {
       closingResponses.callingArguments(closingRequest);
   }
 };
-
 
 /**
  * An Api event emitter or a method with side effects that need
@@ -127,7 +127,8 @@ function ApiEventEmitter (methodRequest, reverser, hostApi, closeCb) {
   this.maybeRunCloser = function (closingRequest) {
     if (self.closed) {
       console.error("Trying to close a closed event emitter");
-      return null;                 //THis shouldn;t happen
+      // THis shouldn't happen
+      return null;
     }
 
     // Default to *some* way of handling responses.
@@ -162,6 +163,7 @@ ApiEventEmitter.prototype = {
    * has been handled.
    */
   destroy: function (shallow) {
+    /* eslint no-unused-vars: 0 */
     var self = this;
     // Closing this and the connection will create a loop so don't omit this.
     if (this.closed) return;

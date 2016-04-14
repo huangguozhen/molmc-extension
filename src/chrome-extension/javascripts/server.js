@@ -3,6 +3,8 @@
  * @name server.js
  * @author Chris Perivolaropoulos
  */
+
+/* eslint no-unused-vars: 0 */
 var HostConnection = require("./hostconnection.js").HostConnection,
     MethodRequest = require("./requests.js").MethodRequest,
     BurstRequest = require("./requests.js").BurstRequest,
@@ -78,11 +80,11 @@ HostKeepAliveConnection.prototype = {
 function getKeepAliveConnection (hostId, connectCb, disconnectCb, timeout) {
   messageApi = require("./messaging.js");
 
-  var portName = JSON.stringify({type:"KeepAliveConnection"}),
+  var portName = JSON.stringify({type: "KeepAliveConnection"}),
       port = messageApi.connect(hostId, {name: portName});
   if (disconnectCb) {
     log.log("Detected disconnect cb on client keepalive");
-    port.onDisconnect.addListener(function () {disconnectCb();});
+    port.onDisconnect.addListener(function () { disconnectCb(); });
   }
 
   var gotToken = false;
@@ -105,7 +107,6 @@ function getKeepAliveConnection (hostId, connectCb, disconnectCb, timeout) {
       port.disconnect();
       return true;
     }
-
 
     if (typeof msg.clientId !== 'number') {
       return false;
@@ -131,7 +132,6 @@ function getKeepAliveConnection (hostId, connectCb, disconnectCb, timeout) {
   }
 }
 
-
 /**
  * Handle (or delegate) connections and messages from any client. Also
  * keep track of open connections and clean them up if the user asks
@@ -156,8 +156,7 @@ function HostServer (apiRoot) {
     state.connections = state.connections.filter(function (c) {
       return c !== connection;
     });
-    log.log("Cleanined:", connection.repr(), '(before: ', len,'after: ',
-            state.connections.length, ')');
+    log.log("Cleanined:", connection.repr(), '(before: ', len, 'after: ', state.connections.length, ')');
   };
 
   function tabDiedCb (keepalive) {

@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 var genericRespHandler = require('./../responses.js').genericRespHandler,
     messageApi = require("./../messaging.js"),
     log = new (require('./../log.js').Log)('genericrequest');

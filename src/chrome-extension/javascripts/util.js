@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 function errorThrower (name) {
   return function () {
     throw new Error("No such method: " + name);
@@ -30,7 +31,7 @@ module.exports.bufToArr = bufToArr;
 function path2callable (object, name, callable) {
   var names = name.split('.'),
       method = names.pop(),
-      obj = (names.reduce(function (ob, meth) {return ob[meth];}, object)
+      obj = (names.reduce(function (ob, meth) { return ob[meth]; }, object)
              || object),
       self = this;
 

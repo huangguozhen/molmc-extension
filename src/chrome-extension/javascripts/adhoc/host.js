@@ -21,7 +21,6 @@ function isOldstyleGetManifest (message) {
     message.callbackId;
 }
 
-
 function getState (apiRoot, state, cb) {
   var formattedState = apiRoot.runtime.getManifest();
   formattedState.connections = state.connections.map(function (c) {
@@ -31,7 +30,7 @@ function getState (apiRoot, state, cb) {
       id: c.id,
       closed: c.closed
     };
-  }),
+  })
 
   formattedState.keepalives = state.keepalives.map(function (k) {
     return k && {
@@ -39,7 +38,7 @@ function getState (apiRoot, state, cb) {
       conf: k.portConf,
       closed: k.closed
     };
-  }),
+  })
 
   cb(formattedState);
 };
@@ -54,8 +53,8 @@ function setupAdHoc (state) {
       apiRoot.runtime.getManifestAsync =
       getState.bind(null, apiRoot, state);
 
-
     // Listen for get state to non-babelfish or early babelfish.
+    /* eslint no-inner-declarations: 0 */
     function provideState (msg, sendResp) {
       if (msg && (msg.method == "getState" || isOldstyleGetManifest(msg))) {
         apiRoot.babelfish.getState(sendResp);

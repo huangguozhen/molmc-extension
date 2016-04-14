@@ -1,4 +1,4 @@
-(function (global){
+(function (global) {
 // setTimeout is clamped to 1000ms min time for background tabs.
 
 // Check wether we are in the app context.
@@ -20,18 +20,21 @@ if (!(global.postMessage && global.addEventListener) || isApp()) {
     var messageName = "setImmediate" + new Date().getTime();
 
     function post(fn) {
-      if (i === 0x100000000) // max queue size
+      if (i === 0x100000000) { // max queue size
         i = 0;
-      if (++i in timeouts)
+      }
+      if (++i in timeouts) {
         throw new Error("setImmediate queue overflow.");
+      }
       timeouts[i] = fn;
       global.postMessage({ type: messageName, id: i }, "*");
       return i;
     }
 
     function receive(ev) {
-      if (ev.source !== window)
+      if (ev.source !== window) {
         return;
+      }
       var data = ev.data;
       if (data && data instanceof Object && data.type === messageName) {
         ev.stopPropagation();
@@ -54,4 +57,4 @@ if (!(global.postMessage && global.addEventListener) || isApp()) {
   })();
 }
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})

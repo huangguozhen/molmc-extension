@@ -1,13 +1,11 @@
-(function (global){
+(function (global) {
 var timeOffset = Date.now();
 global.debugBabelfish = false;
 
-function zeroFill( number, width )
-{
+function zeroFill(number, width) {
   width -= number.toString().length;
-  if ( width > 0 )
-  {
-    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+  if (width > 0) {
+    return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
   }
   return number + ""; // always return a string
 }
@@ -21,7 +19,7 @@ function Log (name, verbosity) {
   this.error = this.console_('error', 0);
   this.warn = this.console_('warn', 1);
   this.info = this.console_('log', 2);
-  this.log =  this.console_('log', 3);
+  this.log = this.console_('log', 3);
 }
 
 Log.prototype = {
@@ -40,7 +38,6 @@ Log.prototype = {
     timeOffset = new Date();
   },
 
-
   console_: function (type, verbosity) {
     var self = this;
     if (this.showTimes) {
@@ -57,14 +54,14 @@ Log.prototype = {
     return function () {};
   },
 
-
   prefix: function () {
-    if (this.showTimes)
-      return "[" + this.timestampString() +  " : " + this.name + "]";
+    if (this.showTimes) {
+      return "[" + this.timestampString() + " : " + this.name + "]";
+    }
 
-    return "[" +this.name + "] ";
+    return "[" + this.name + "] ";
   }
 };
 module.exports.Log = Log;
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
