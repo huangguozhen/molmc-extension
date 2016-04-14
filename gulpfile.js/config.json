@@ -1,13 +1,13 @@
 {
   "root": {
     "src": "./src",
-    "dest": "./public"
+    "dest": "./public/demo"
   },
 
   "tasks": {
     "browserSync": {
       "server": {
-        "baseDir": "public"
+        "baseDir": "public/demo"
       }
     },
 
@@ -20,7 +20,7 @@
       "src": "javascripts",
       "dest": "javascripts",
       "entries": {
-        "app": ["./app.js"]
+        "app": ["./client.js"]
       },
       "extensions": ["js", "json"],
       "babel": {
