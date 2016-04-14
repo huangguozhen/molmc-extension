@@ -1,10 +1,10 @@
-var path            = require('path')
-var pathToUrl       = require('../../lib/pathToUrl')
-var webpack         = require('webpack')
-var gulp            = require('gulp')
-var logger          = require('../../lib/compileLogger')
+var path = require('path')
+var pathToUrl = require('../../lib/pathToUrl')
+var webpack = require('webpack')
+var gulp = require('gulp')
+var logger = require('../../lib/compileLogger')
 
-extensionConfig = function() {
+var extensionConfig = function(env) {
   var jsSrc = path.resolve('src', 'chrome-extension/javascripts')
   var jsDest = path.resolve('public', 'chrome-extension/javascripts')
   var publicPath = pathToUrl('chrome-extension/javascripts', '/')
@@ -34,34 +34,38 @@ extensionConfig = function() {
     }
   }
 
+  if (env == 'development') {
+    webpackConfig.devtool = 'inline-source-map'
+  } else {
+    webpackConfig.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify('production')
+        }
+      }),
+      new webpack.optimize.DedupePlugin(),
+      new webpack.optimize.UglifyJsPlugin(),
+      new webpack.NoErrorsPlugin()
+    )
+  }
+
   // Karma doesn't need entry points or output settings
   webpackConfig.entry = {
     "host-bundles": ["./host.js"],
     "background": ["./background.js"]
   }
 
-  webpackConfig.output= {
+  webpackConfig.output = {
     path: path.normalize(jsDest),
     filename: filenamePattern,
     publicPath: publicPath
   }
 
-  webpackConfig.plugins.push(
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
-    new webpack.NoErrorsPlugin()
-  )
-
   return webpackConfig
 }
 
 var javascriptsTask = function(callback) {
-  webpack(extensionConfig(), function(err, stats) {
+  webpack(extensionConfig('development'), function(err, stats) {
     logger(err, stats)
     callback()
   })
