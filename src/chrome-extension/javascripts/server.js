@@ -6,13 +6,13 @@
 
 /* eslint no-unused-vars: 0 */
 var HostConnection = require("./hostconnection.js").HostConnection,
-    MethodRequest = require("./requests.js").MethodRequest,
-    BurstRequest = require("./requests.js").BurstRequest,
-    ErrResponse = require("./responses.js").ErrResponse,
-    AckResponse = require("./responses.js").AckResponse,
-    log = new (require('./log.js').Log)('server'),
-    messageApi = require('./messaging.js'),
-    BootstrapHost = require('./bootstraphost.js').BootstrapHost;
+  MethodRequest = require("./requests.js").MethodRequest,
+  BurstRequest = require("./requests.js").BurstRequest,
+  ErrResponse = require("./responses.js").ErrResponse,
+  AckResponse = require("./responses.js").AckResponse,
+  log = new (require('./log.js').Log)('server'),
+  messageApi = require('./messaging.js'),
+  BootstrapHost = require('./bootstraphost.js').BootstrapHost;
 require('./setimmediate.js');
 
 var state = {connections: [],
@@ -81,7 +81,7 @@ function getKeepAliveConnection (hostId, connectCb, disconnectCb, timeout) {
   messageApi = require("./messaging.js");
 
   var portName = JSON.stringify({type: "KeepAliveConnection"}),
-      port = messageApi.connect(hostId, {name: portName});
+    port = messageApi.connect(hostId, {name: portName});
   if (disconnectCb) {
     log.log("Detected disconnect cb on client keepalive");
     port.onDisconnect.addListener(function () { disconnectCb(); });
