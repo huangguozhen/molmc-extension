@@ -1,68 +1,69 @@
 {
-   "app": {
-      "background": {
-         "page": "html/background.html"
-      }
-   },
-   "author": "huangguozhen",
-   "description": "Serial & USB Communication App",
-   "externally_connectable": {
-      "accepts_tls_channel_id": false,
-      "matches": [ "http://localhost/*", "http://localhost:3000/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ]
-   },
-   "icons": {
-      "128": "images/icon128.png",
-      "64": "images/icon64.png",
-      "16": "images/icon16.png"
-   },
-   "manifest_version": 2,
-   "minimum_chrome_version": "41",
-   "name": "IntoRobot App",
-   "permissions": [ {
-      "usbDevices": [ {
-         "productId": 8451,
-         "vendorId": 1003
-      }, {
-         "productId": 8452,
-         "vendorId": 1003
-      }, {
-         "productId": 8454,
-         "vendorId": 1003
-      }, {
-         "productId": 8455,
-         "vendorId": 1003
-      }, {
-         "productId": 8464,
-         "vendorId": 1003
-      }, {
-         "productId": 8465,
-         "vendorId": 1003
-      }, {
-         "productId": 8512,
-         "vendorId": 1003
-      }, {
-         "productId": 8513,
-         "vendorId": 1003
-      }, {
-         "productId": 24592,
-         "vendorId": 1027
-      }, {
-         "productId": 24577,
-         "vendorId": 1027
-      }, {
-         "productId": 1500,
-         "vendorId": 5824
-      }, {
-         "productId": 51124,
-         "vendorId": 1003
-      }, {
-         "productId": 2351,
-         "vendorId": 5824
-      }, {
-         "productId": 3231,
-         "vendorId": 6017
-      } ]
-   }, "storage", "serial", "usb", "http://localhost:3000/*", "http://localhost/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ],
-   "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.0.0"
+  "app": {
+    "background": {
+      "page": "background.html"
+    }
+  },
+  "author": "huangguozhen",
+  "description": "__MSG_appDescription__",
+  "externally_connectable": {
+    "accepts_tls_channel_id": false,
+    "matches": [ "http://localhost/*", "http://localhost:3000/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ]
+  },
+  "icons": {
+    "128": "images/icon128.png",
+    "64": "images/icon64.png",
+    "16": "images/icon16.png"
+  },
+  "manifest_version": 2,
+  "default_locale": "en",
+  "minimum_chrome_version": "41",
+  "name": "__MSG_appName__",
+  "permissions": [ {
+    "usbDevices": [ {
+      "productId": 8451,
+      "vendorId": 1003
+    },{
+      "productId": 8452,
+      "vendorId": 1003
+    },{
+      "productId": 8454,
+      "vendorId": 1003
+    },{
+      "productId": 8455,
+      "vendorId": 1003
+    },{
+      "productId": 8464,
+      "vendorId": 1003
+    },{
+      "productId": 8465,
+      "vendorId": 1003
+    },{
+      "productId": 8512,
+      "vendorId": 1003
+    },{
+      "productId": 8513,
+      "vendorId": 1003
+    },{
+      "productId": 24592,
+      "vendorId": 1027
+    },{
+      "productId": 24577,
+      "vendorId": 1027
+    },{
+      "productId": 1500,
+      "vendorId": 5824
+    },{
+      "productId": 51124,
+      "vendorId": 1003
+    },{
+      "productId": 2351,
+      "vendorId": 5824
+    },{
+      "productId": 3231,
+      "vendorId": 6017
+    } ]
+  }, "storage", "serial", "usb", "http://localhost:3000/*", "http://localhost/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ],
+  "update_url": "https://clients2.google.com/service/update2/crx",
+  "version": "1.0.0"
 }
