@@ -5,9 +5,9 @@ var gulp = require('gulp')
 var logger = require('../../lib/compileLogger')
 
 var extensionConfig = function(env) {
-  var jsSrc = path.resolve('src', 'chrome-extension/javascripts')
-  var jsDest = path.resolve('public', 'chrome-extension/javascripts')
-  var publicPath = pathToUrl('chrome-extension/javascripts', '/')
+  var jsSrc = path.resolve('src', 'chrome-extension/js')
+  var jsDest = path.resolve('public', 'chrome-extension/bundles')
+  var publicPath = pathToUrl('chrome-extension/bundles', '/')
 
   var extensions = ['.js', '.json']
   var filenamePattern = '[name].js'
@@ -51,7 +51,7 @@ var extensionConfig = function(env) {
 
   // Karma doesn't need entry points or output settings
   webpackConfig.entry = {
-    "host-bundles": ["./host.js"],
+    "app": ["./host.js"],
     "background": ["./background.js"]
   }
 
@@ -65,11 +65,11 @@ var extensionConfig = function(env) {
 }
 
 var javascriptsTask = function(callback) {
-  webpack(extensionConfig('development'), function(err, stats) {
+  webpack(extensionConfig('production'), function(err, stats) {
     logger(err, stats)
     callback()
   })
 }
 
-gulp.task('chrome:javascripts', javascriptsTask)
+gulp.task('chrome:scripts', javascriptsTask)
 module.exports = javascriptsTask

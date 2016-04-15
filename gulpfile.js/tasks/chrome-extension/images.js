@@ -1,10 +1,10 @@
-var changed     = require('gulp-changed')
-var gulp        = require('gulp')
-var imagemin    = require('gulp-imagemin')
-var path        = require('path')
+var changed = require('gulp-changed')
+var gulp = require('gulp')
+var imagemin = require('gulp-imagemin')
+var path = require('path')
 
 var paths = {
-  src: path.join('src/chrome-extension/images/**/*{' + ['png', 'jpg', 'gif'] + '}'),
+  src: path.join('src/chrome-extension/img/**/*{' + ['png', 'jpg', 'gif'] + '}'),
   dest: path.join('public/chrome-extension/images/')
 }
 
