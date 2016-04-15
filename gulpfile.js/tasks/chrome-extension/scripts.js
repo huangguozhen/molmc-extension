@@ -5,7 +5,7 @@ var gulp = require('gulp')
 var logger = require('../../lib/compileLogger')
 
 var extensionConfig = function(env) {
-  var jsSrc = path.resolve('src', 'chrome-extension/js')
+  var jsSrc = path.resolve('src', 'chrome-extension/src')
   var jsDest = path.resolve('public', 'chrome-extension/bundles')
   var publicPath = pathToUrl('chrome-extension/bundles', '/')
 
