@@ -12,10 +12,10 @@
 
 /* eslint no-unused-vars: 0 */
 var Arguments = require('./../arguments.js').Arguements,
-    log = new (require('./../log.js').Log)('burstrequest'),
-    GenericRequest = require('./generic.js').GenericRequest,
-    ErrResponse = require('./../responses.js').ErrResponse,
-    BurstResponse = require('./../responses.js').BurstResponse;
+  log = new (require('./../log.js').Log)('burstrequest'),
+  GenericRequest = require('./generic.js').GenericRequest,
+  ErrResponse = require('./../responses.js').ErrResponse,
+  BurstResponse = require('./../responses.js').BurstResponse
 
 /**
  * A request for a burst of callbacks that are destined for the
@@ -27,10 +27,10 @@ var Arguments = require('./../arguments.js').Arguements,
  * @param {Function} callback The event callback raw.
  */
 function BurstRequest (hostId, connection, callback) {
-  this.hostId = hostId;
-  this.connection = connection;
-  this.callback = callback;
-  this.blocked = false;
+  this.hostId = hostId
+  this.connection = connection
+  this.callback = callback
+  this.blocked = false
 }
 
 /**
@@ -46,30 +46,29 @@ function BurstRequest (hostId, connection, callback) {
  */
 BurstRequest.maybeHandle = function (msg, connections, sendRespRaw) {
   if (msg.requestType != "BurstRequest") {
-    return false;
-  };
+    return false
+  }
   var usefulCons = connections.filter(function (c) {
-    return msg.connId == c.id;
-  });
+    return msg.connId == c.id
+  })
 
   if (usefulCons.length != 1) {
-    var errMsg = "Burst request for connection " + msg.connId + " corresponds to " +
-          usefulCons.length + " connections",
-        errResp = new ErrResponse(errMsg);
-    errResp.send(sendRespRaw);
-    return true;
+    var errMsg = "Burst request for connection " + msg.connId + " corresponds to " + usefulCons.length + " connections",
+      errResp = new ErrResponse(errMsg)
+    errResp.send(sendRespRaw)
+    return true
   }
 
   function sendBuffer (buf) {
-    var br = new BurstResponse(buf, msg);
-    br.send(sendRespRaw);
+    var br = new BurstResponse(buf, msg)
+    br.send(sendRespRaw)
   }
 
-  usefulCons[0].flushBuffer(sendBuffer);
-  return true;
-};
+  usefulCons[0].flushBuffer(sendBuffer)
+  return true
+}
 
-BurstRequest.prototype = Object.create(GenericRequest.prototype);
+BurstRequest.prototype = Object.create(GenericRequest.prototype)
 
 /**
  * Create a serializable object to send over the API.
@@ -77,8 +76,8 @@ BurstRequest.prototype = Object.create(GenericRequest.prototype);
  */
 BurstRequest.prototype.forSending = function () {
   return {requestType: "BurstRequest",
-          connId: this.connection.id};
-};
+          connId: this.connection.id}
+}
 
 /**
  * Get the callback from the arguments. Will only work on the client
@@ -86,7 +85,7 @@ BurstRequest.prototype.forSending = function () {
  * @returns {Function} the callback or undefined.
  */
 BurstRequest.prototype.getCallback = function () {
-  return this.callback;
-};
+  return this.callback
+}
 
-module.exports.BurstRequest = BurstRequest;
+module.exports.BurstRequest = BurstRequest

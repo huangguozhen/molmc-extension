@@ -23,13 +23,13 @@
 
 /* eslint no-unused-vars: 0 */
 var Arguments = require('./arguments.js').Arguments,
-    MethodRequest = require('./requests.js').MethodRequest,
-    ApiEventEmitter = require("./apieventemitter.js").ApiEventEmitter,
-    r = require("./responses.js"),
-    util = require("./util.js"),
-    closed = [],
-    log = new (require('./log.js').Log)('hostconnection');
-require('./setimmediate.js');
+  MethodRequest = require('./requests.js').MethodRequest,
+  ApiEventEmitter = require("./apieventemitter.js").ApiEventEmitter,
+  r = require("./responses.js"),
+  util = require("./util.js"),
+  closed = [],
+  log = new (require('./log.js').Log)('hostconnection')
+require('./setimmediate.js')
 
 /**
  * Method gets the args from the connection. Reverse just gets the
@@ -61,52 +61,52 @@ require('./setimmediate.js');
  * external resources.
  */
 function HostConnection (port, hostApi, closeCb) {
-  var self = this;
-  this.buffer = [];
-  this.port = port;
-  this.portConf = JSON.parse(port.name);
-  this.id = this.portConf.id;
-  this.closeCb = closeCb.bind(this);
-  this.closed = false;
+  var self = this
+  this.buffer = []
+  this.port = port
+  this.portConf = JSON.parse(port.name)
+  this.id = this.portConf.id
+  this.closeCb = closeCb.bind(this)
+  this.closed = false
 
   // Will not be sent.
   var sendRaw = function (msg) {
-    self.pushRequest(msg);
-  };
+    self.pushRequest(msg)
+  }
   this.methodRequest = MethodRequest.fromMessage(
-    null, this.portConf.methodRequestMsg, sendRaw);
+    null, this.portConf.methodRequestMsg, sendRaw)
 
-  log.log("Opening connection:", this.repr());
+  log.log("Opening connection:", this.repr())
   this.apiEvent = new ApiEventEmitter(this.methodRequest,
                                       this.portConf.reverser,
                                       hostApi,
-                                      this.close.bind(this));
+                                      this.close.bind(this))
   this.port.onMessage.addListener(function (msg) {
     if (msg == "client created") {
-      self.port.postMessage("ack");
-      self.apiEvent.fire();
+      self.port.postMessage("ack")
+      self.apiEvent.fire()
     }
-  });
-  log.log("Registering server side ondisconnect for method connection");
-  this.port.onDisconnect.addListener(this.close.bind(this));
+  })
+  log.log("Registering server side ondisconnect for method connection")
+  this.port.onDisconnect.addListener(this.close.bind(this))
 }
 
 HostConnection.prototype = {
   repr: function () {
-    return this.id + " ( " + this.methodRequest.method + " )";
+    return this.id + " ( " + this.methodRequest.method + " )"
   },
 
   /**
    * Close the connection gracefully.
    */
   close: function () {
-    if (this.closed) return;
-    log.log("Closing connection:", this.repr());
-    this.closed = true;
-    this.port.disconnect();
-    this.apiEvent.destroy();
-    this.port = null;
-    this.closeCb();
+    if (this.closed) return
+    log.log("Closing connection:", this.repr())
+    this.closed = true
+    this.port.disconnect()
+    this.apiEvent.destroy()
+    this.port = null
+    this.closeCb()
   },
 
   /**
@@ -115,10 +115,10 @@ HostConnection.prototype = {
    * @param {String} message The contents of the error.
    */
   sendError: function (message) {
-    if (this.closed) return;
+    if (this.closed) return
 
-    this.port.postMessage(new r.ErrResponse(message).forSending());
-    this.close();
+    this.port.postMessage(new r.ErrResponse(message).forSending())
+    this.close()
   },
 
   /**
@@ -126,24 +126,24 @@ HostConnection.prototype = {
    * instead buffered.
    */
   pushRequest: function (reqMsg) {
-    if (this.closed) return;
+    if (this.closed) return
 
     if (reqMsg.responseType == "ErrResponse") {
-      this.sendError(reqMsg.err);
+      this.sendError(reqMsg.err)
     }
 
     // We expect they wont contain a function.
     if (!this.apiEvent.firstResponseMsg) {
-      this.apiEvent.firstResponseMsg = reqMsg;
+      this.apiEvent.firstResponseMsg = reqMsg
     }
 
     if (this.buffer.length == 0) {
       // To the end of the queue.
-      setImmediate(this.setDtr.bind(this));
+      setImmediate(this.setDtr.bind(this))
     }
 
-    this.buffer.push(reqMsg);
-    this.buffer.timestamp = Date.now();
+    this.buffer.push(reqMsg)
+    this.buffer.timestamp = Date.now()
   },
 
   /**
@@ -152,7 +152,7 @@ HostConnection.prototype = {
   setDtr: function () {
     // This might be lef over on the queue.
     if (this.port) {
-      this.port.postMessage({timestamp: this.buffer.timestamp, connection: this.id});
+      this.port.postMessage({timestamp: this.buffer.timestamp, connection: this.id})
     }
   },
 
@@ -163,8 +163,8 @@ HostConnection.prototype = {
    * Arguments objects.
    */
   flushBuffer: function (callback) {
-    callback(this.buffer);
-    this.buffer = [];
+    callback(this.buffer)
+    this.buffer = []
   },
 
   /**
@@ -179,13 +179,13 @@ HostConnection.prototype = {
    * this is an ArgsResponse.
    */
   tryClosing: function (closingRequest) {
-    if (this.closed) return false;
-    var ret = this.apiEvent.maybeRunCloser(closingRequest);
+    if (this.closed) return false
+    var ret = this.apiEvent.maybeRunCloser(closingRequest)
     if (this.apiEvent.closed) {
-      this.close();
+      this.close()
     }
-    return ret;
+    return ret
   }
-};
+}
 
-module.exports.HostConnection = HostConnection;
+module.exports.HostConnection = HostConnection

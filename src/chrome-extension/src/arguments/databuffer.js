@@ -1,5 +1,5 @@
 var argumentClasses = require('./factory.js').argumentClasses,
-    util = require('../util.js');
+  util = require('../util.js')
 /**
  * Boxing for databuffers.
  *
@@ -9,11 +9,11 @@ var argumentClasses = require('./factory.js').argumentClasses,
  */
 function DatabufferArgument(arg) {
   if (!DatabufferArgument.canWrap(arg)) {
-    throw Error("Cant wrap argument " + arg + " as a databuffer");
+    throw Error("Cant wrap argument " + arg + " as a databuffer")
   }
 
-  this.buffer = arg instanceof ArrayBuffer ? arg : null;
-  this.obj = arg.isArrayBuffer ? arg : null;
+  this.buffer = arg instanceof ArrayBuffer ? arg : null
+  this.obj = arg.isArrayBuffer ? arg : null
 }
 
 /**
@@ -23,8 +23,8 @@ function DatabufferArgument(arg) {
  * @returns {Boolean} True if we can wrap.
  */
 DatabufferArgument.canWrap = function (arg) {
-  return arg && ((arg instanceof ArrayBuffer) || arg.isArrayBuffer);
-};
+  return arg && ((arg instanceof ArrayBuffer) || arg.isArrayBuffer)
+}
 
 DatabufferArgument.prototype = {
   /**
@@ -32,7 +32,7 @@ DatabufferArgument.prototype = {
    * the API.
    */
   forCalling: function () {
-    return this.buffer || util.arrToBuf(this.obj.data);
+    return this.buffer || util.arrToBuf(this.obj.data)
   },
 
   /**
@@ -41,15 +41,15 @@ DatabufferArgument.prototype = {
    */
   forSending: function () {
     return this.obj || {data: util.bufToArr(this.buffer),
-                        isArrayBuffer: true};
+                        isArrayBuffer: true}
   },
 
   concat: function (msg) {
-    if (!msg.isArrayBuffer) return this;
-    var ret = this.forSending();
-    ret.data = ret.data.concat(msg.data);
-    return new DatabufferArgument(ret);
+    if (!msg.isArrayBuffer) return this
+    var ret = this.forSending()
+    ret.data = ret.data.concat(msg.data)
+    return new DatabufferArgument(ret)
   }
-};
-argumentClasses.push(DatabufferArgument);
-module.exports = DatabufferArgument;
+}
+argumentClasses.push(DatabufferArgument)
+module.exports = DatabufferArgument

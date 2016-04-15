@@ -6,7 +6,7 @@
  */
 
 var CallbackArgument = require('./callback.js'),
-    argumentFactory = require('./factory.js').argumentFactory;
+  argumentFactory = require('./factory.js').argumentFactory
 
 /**
  * An wrapper around an arguments list that abstracts all
@@ -22,8 +22,8 @@ var CallbackArgument = require('./callback.js'),
  */
 function Arguments (args, replaceCb) {
   this.arguments = args.map(function (a) {
-    return argumentFactory(a, replaceCb);
-  });
+    return argumentFactory(a, replaceCb)
+  })
 }
 
 Arguments.prototype = {
@@ -32,7 +32,7 @@ Arguments.prototype = {
    * @returns {Array} An array of arguments as expected by the API
    */
   forCalling: function () {
-    return this.arguments.map(function (a) { return a.forCalling(); });
+    return this.arguments.map(function (a) { return a.forCalling() })
   },
 
   /**
@@ -42,8 +42,8 @@ Arguments.prototype = {
    */
   forSending: function () {
     return this.arguments.map(function (a) {
-      return a.forSending();
-    });
+      return a.forSending()
+    })
   },
 
   /**
@@ -54,23 +54,21 @@ Arguments.prototype = {
    * actual callback.
    */
   getCallback: function () {
-    var cbArg = this.arguments.filter(function (a) {
-      return a instanceof CallbackArgument;
-    })[0],
-        ret = cbArg ? cbArg.forCalling() : this.replaceCb;
+    var cbArg = this.arguments.filter(function (a) { return a instanceof CallbackArgument })[0],
+      ret = cbArg ? cbArg.forCalling() : this.replaceCb
 
-    return ret;
+    return ret
   },
 
   setLens: function(lens) {
     if (this.replaceCb) {
-      this.replaceCb = lens(this.replaceCb);
+      this.replaceCb = lens(this.replaceCb)
     }
 
     this.arguments.forEach(function(a) {
-      if (a.setLens) a.setLens(lens);
-    });
+      if (a.setLens) a.setLens(lens)
+    })
   }
-};
+}
 
-module.exports = Arguments;
+module.exports = Arguments

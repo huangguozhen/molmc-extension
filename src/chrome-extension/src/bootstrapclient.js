@@ -1,5 +1,5 @@
 (function(global) {
-  var messageApi = require("./messaging.js");
+  var messageApi = require("./messaging.js")
 
   function BootStrapClient() {}
 
@@ -17,10 +17,10 @@
         callbackId: -1
       }, function clientStateResponse(resp) {
         if (!resp || resp.version) {
-          cb(resp);
+          cb(resp)
           return
         }
-        var val = null;
+        var val = null
         try {
           val = resp.args.args[0].val
         } catch (e) {}
@@ -29,21 +29,21 @@
     },
 
     getHostId: function(cb, cfg) {
-      cfg = cfg || {};
+      cfg = cfg || {}
       var appIds = cfg.ids || global.appIds || ["jommgdhcpkjoikkjcnpafeofedlfphfb", "degcgnklllnnbfnknpelaclgiclcaioe", global.APP_ID],
         car = appIds[0],
         cdr = appIds.slice(1),
-        self = this;
+        self = this
 
       if (!car) {
-        cb();
+        cb()
         return
       }
 
       this.getState(car, function checkManifest(arg) {
         if (!arg) {
-          cfg.ids = cdr;
-          self.getHostId(cb, cfg);
+          cfg.ids = cdr
+          self.getHostId(cb, cfg)
           return
         }
         cb(car, arg)
@@ -52,7 +52,7 @@
 
     getManifest: function(cb, cfg) {
       this.getHostId(function(id, state) {
-        if (state) state.hostId = id;
+        if (state) state.hostId = id
         cb(state)
       }, cfg)
     }

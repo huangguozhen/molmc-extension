@@ -1,27 +1,27 @@
 var argumentClasses = require('./factory.js').argumentClasses,
-    DatabufferArgument = require('./databuffer.js');
+  DatabufferArgument = require('./databuffer.js')
 
 function DataArgument(arg) {
   if (!DataArgument.canWrap(arg)) {
-    throw new Error("Expected object like {data: ArrayBuffer}, got: ", arg);
+    throw new Error("Expected object like {data: ArrayBuffer}, got: ", arg)
   }
-  this.arg = arg;
-  this.data = new DatabufferArgument(arg.data);
+  this.arg = arg
+  this.data = new DatabufferArgument(arg.data)
 }
 
 DataArgument.canWrap = function (arg) {
   return arg instanceof Object &&
-    DatabufferArgument.canWrap(arg.data);
-};
+    DatabufferArgument.canWrap(arg.data)
+}
 
 DataArgument.prototype = {
   argCopy: function () {
-    var ret = {}, self = this;
+    var ret = {}, self = this
     Object.getOwnPropertyNames(this.arg).forEach(function (k) {
-      ret[k] = self.arg[k];
-    });
+      ret[k] = self.arg[k]
+    })
 
-    return ret;
+    return ret
   },
 
   /**
@@ -29,9 +29,9 @@ DataArgument.prototype = {
    * the API.
    */
   forCalling: function () {
-    var ret = this.argCopy();
-    ret.data = this.data.forCalling();
-    return ret;
+    var ret = this.argCopy()
+    ret.data = this.data.forCalling()
+    return ret
   },
 
   /**
@@ -39,17 +39,17 @@ DataArgument.prototype = {
    * into a databuffer container.
    */
   forSending: function () {
-    var ret = this.argCopy();
-    ret.data = this.data.forSending();
-    return ret;
+    var ret = this.argCopy()
+    ret.data = this.data.forSending()
+    return ret
   },
 
   concat: function (msg) {
-    if (!msg.data || !msg.data.isArrayBuffer) return this;
-    var ret = this.forSending();
-    ret.data = this.data.concat(msg.data).forSending();
-    return new DataArgument(ret);
+    if (!msg.data || !msg.data.isArrayBuffer) return this
+    var ret = this.forSending()
+    ret.data = this.data.concat(msg.data).forSending()
+    return new DataArgument(ret)
   }
-};
-argumentClasses.push(DataArgument);
-module.exports = DataArgument;
+}
+argumentClasses.push(DataArgument)
+module.exports = DataArgument

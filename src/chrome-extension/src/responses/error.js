@@ -1,4 +1,4 @@
-var GenericResponse = require('./generic.js').GenericResponse;
+var GenericResponse = require('./generic.js').GenericResponse
 
 /**
  * An error occured serving the request.
@@ -9,9 +9,9 @@ var GenericResponse = require('./generic.js').GenericResponse;
  * chrome.runtime.lastError
  */
 function ErrResponse (error, type) {
-  this.error = error;
-  this.type = type;
-};
+  this.error = error
+  this.type = type
+}
 
 /**
  * Handle the response on the client side if it is of the correct
@@ -25,33 +25,33 @@ function ErrResponse (error, type) {
  * @return {Boolean} true if we handled it.
  */
 ErrResponse.maybeHandle = function (msg, request, doneCb) {
-  if (msg && msg.responseType != "ErrResponse") return false;
+  if (msg && msg.responseType != "ErrResponse") return false
 
-  var rawError = msg ? msg.err : "Undefined message, probably host is disconnected.";
+  var rawError = msg ? msg.err : "Undefined message, probably host is disconnected."
   if (request.trace) {
-    console.warn("Received error:", msg.err);
-    console.warn(request.trace);
-  };
-
-  var withError = function (err, cb) {
-    cb();
-
-    if (err) {
-      console.error("Uncaught:", err);
-    }
-  };
-
-  if (request.getCallback()) {
-    (request.withError || withError)(rawError, request.getCallback());
-    doneCb();
-    return true;
+    console.warn("Received error:", msg.err)
+    console.warn(request.trace)
   }
 
-  doneCb(rawError);
-  return true;
-};
+  var withError = function (err, cb) {
+    cb()
 
-ErrResponse.prototype = new GenericResponse();
+    if (err) {
+      console.error("Uncaught:", err)
+    }
+  }
+
+  if (request.getCallback()) {
+    (request.withError || withError)(rawError, request.getCallback())
+    doneCb()
+    return true
+  }
+
+  doneCb(rawError)
+  return true
+}
+
+ErrResponse.prototype = new GenericResponse()
 
 /**
  * Serialized response that also can be recognized as a response.
@@ -59,9 +59,10 @@ ErrResponse.prototype = new GenericResponse();
  * @returns {Object} the object to be put through the API.
  */
 ErrResponse.prototype.forSending = function () {
-  return {responseType: "ErrResponse",
-          err: this.error,
-          type: this.type
-         };
-};
-module.exports = ErrResponse;
+  return {
+    responseType: "ErrResponse",
+    err: this.error,
+    type: this.type
+  }
+}
+module.exports = ErrResponse

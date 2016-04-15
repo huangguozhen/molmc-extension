@@ -6,10 +6,10 @@
 
 function ChromeMessaging () {
   this.version = chrome.runtime.getManifest ?
-    chrome.runtime.getManifest().version : "1";
-  this.onConnectExternal = chrome.runtime.onConnectExternal;
-  this.onMessageExternal = chrome.runtime.onMessageExternal;
-  this.sendMessage = chrome.runtime.sendMessage.bind(chrome.runtime);
-  this.connect = chrome.runtime.connect.bind(chrome.runtime);
+    chrome.runtime.getManifest().version : "1"
+  this.onConnectExternal = chrome.runtime.onConnectExternal
+  this.onMessageExternal = chrome.runtime.onMessageExternal
+  this.sendMessage = chrome.runtime.sendMessage.bind(chrome.runtime)
+  this.connect = chrome.runtime.connect.bind(chrome.runtime)
 }
-module.exports.ChromeMessaging = ChromeMessaging;
+module.exports.ChromeMessaging = ChromeMessaging

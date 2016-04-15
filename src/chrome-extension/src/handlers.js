@@ -1,3 +1,6 @@
+/*
+ * 16
+ */
 /* eslint no-unused-vars: 0 */
 var MethodRequest = require("./requests.js").MethodRequest,
   ClientConnection = require("./clientconnection.js").ClientConnection,
@@ -5,23 +8,22 @@ var MethodRequest = require("./requests.js").MethodRequest,
   messageApi = require("./server.js").messageApi,
   errhandle = require("./error.js"),
   getConfig = require("./config.js").getConfig,
-  log = new (require("./log.js").Log)("handlers");
-
-require("./setimmediate.js");
+  log = new (require("./log.js").Log)("handlers")
+require("./setimmediate.js")
 
 function uncaughtError(err) {
   console.error(err)
 }
-var clientConnections = [];
+var clientConnections = []
 
 function handlerFactory(path, config, withError) {
-  var handler;
+  var handler
 
   function unregisterConnection() {
     if (!this.closed) {
       this.close()
     }
-    var self = this;
+    var self = this
     clientConnections = clientConnections.filter(function(c) {
       return c !== self
     })
@@ -34,14 +36,13 @@ function handlerFactory(path, config, withError) {
   if (config.reverseMethods[path]) {
     return registerConnection
   }
-  var isReverter = Object.getOwnPropertyNames(config.reverseMethods).some(function(k) {
-      return config.reverseMethods[k].path == path
-    }),
-    noCallback = config.noCallbackMethods.indexOf(path) > -1;
+
+  var isReverter = Object.getOwnPropertyNames(config.reverseMethods).some(function(k) { return config.reverseMethods[k].path == path }),
+    noCallback = config.noCallbackMethods.indexOf(path) > -1
 
   return function() {
-    var mr = new MethodRequest(config.hostId, path, [].slice.call(arguments), isReverter, noCallback);
-    mr.withError = withError;
+    var mr = new MethodRequest(config.hostId, path, [].slice.call(arguments), isReverter, noCallback)
+    mr.withError = withError
     mr.send()
   }
 }
@@ -49,14 +50,14 @@ function handlerFactory(path, config, withError) {
 function setupClient(apiRoot, connectCb, disconnectCb, errorCb, timeout) {
   if (apiRoot.local && apiRoot.local.token) {
     if (errorCb) {
-      errorCb("already_connected");
+      errorCb("already_connected")
       return
     }
     throw new Error("Tried to reconnect to a non disconnected api")
   }
   getConfig(function(config) {
-    apiRoot.local = config;
-    asApiClient(apiRoot);
+    apiRoot.local = config
+    asApiClient(apiRoot)
     connectCb()
   }, disconnectCb, errorCb, timeout)
 }
@@ -64,23 +65,22 @@ function setupClient(apiRoot, connectCb, disconnectCb, errorCb, timeout) {
 function asApiClient(apiRoot) {
   apiRoot.local.getConnections = function() {
     return clientConnections
-  };
+  }
   apiRoot.local.disconnect = function(done, silent) {
     var self = this,
-      evt = null;
+      evt = null
     if (this.token && this.token.port) {
-      this.token.port.disconnect();
+      this.token.port.disconnect()
       if (!silent) {
         evt = this.token.disconnectCb
       }
       setImmediate(function() {
-        if (evt) evt();
+        if (evt) evt()
         if (done) done()
       })
     }
     this.token = null
-  };
-
+  }
   apiRoot.local.methods.forEach(function(path) {
     var names = path.split("."),
       method = names.pop(),
@@ -89,13 +89,12 @@ function asApiClient(apiRoot) {
           ob[meth] = {}
         }
         return ob[meth]
-      }, apiRoot);
-    if (obj[method]) return;
+      }, apiRoot)
+    if (obj[method]) return
     obj[method] = handlerFactory(path, apiRoot.local, errhandle.withError.bind(null, apiRoot))
   })
 }
-
-module.exports.getConfig = getConfig;
-module.exports.handlerFactory = handlerFactory;
-module.exports.setupClient = setupClient;
+module.exports.getConfig = getConfig
+module.exports.handlerFactory = handlerFactory
+module.exports.setupClient = setupClient
 module.exports.uncaughtError = uncaughtError

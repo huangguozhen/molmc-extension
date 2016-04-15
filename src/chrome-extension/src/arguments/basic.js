@@ -1,11 +1,11 @@
-var argumentClasses = require('./factory.js').argumentClasses;
+var argumentClasses = require('./factory.js').argumentClasses
 
 /**
  * An already serializable argument boxer.
  * @param {argument} arg
  */
 function BasicArgument(arg) {
-  this.value = arg;
+  this.value = arg
 }
 /**
  * Wether we can wrap. We assume we always can.
@@ -13,23 +13,23 @@ function BasicArgument(arg) {
  * @returns {Boolean} Always true.
  */
 BasicArgument.canWrap = function (arg) {
-  return true;
-};
+  return true
+}
 
 BasicArgument.prototype = {
   /**
    * @returns {anything} Just return the value.
    */
   forCalling: function () {
-    return this.value;
+    return this.value
   },
 
   /**
    * @returns {anything} Just return the value.
    */
   forSending: function () {
-    return this.value;
+    return this.value
   }
-};
-argumentClasses.push(BasicArgument);
-module.exports = BasicArgument;
+}
+argumentClasses.push(BasicArgument)
+module.exports = BasicArgument

@@ -1,12 +1,12 @@
-var GenericResponse = require('./generic.js').GenericResponse;
-require('./../setimmediate.js');
+var GenericResponse = require('./generic.js').GenericResponse
+require('./../setimmediate.js')
 
 /**
  * The request wasn't supposed to yield any result but was
  * successful.
  */
 function AckResponse () {
-};
+}
 
 /**
  * Handle the response on the client side if it is of the correct
@@ -20,12 +20,12 @@ function AckResponse () {
  * @return {Boolean} true if we handled it.
  */
 AckResponse.maybeHandle = function (msg, request, doneCb) {
-  if (msg.responseType != "AckResponse") return false;
-  setImmediate(doneCb);
-  return true;
-};
+  if (msg.responseType != "AckResponse") return false
+  setImmediate(doneCb)
+  return true
+}
 
-AckResponse.prototype = Object.create(GenericResponse.prototype);
+AckResponse.prototype = Object.create(GenericResponse.prototype)
 
 /**
  * Serialized response that also can be recognized as a response.
@@ -33,6 +33,6 @@ AckResponse.prototype = Object.create(GenericResponse.prototype);
  * @returns {Object} the object to be put through the API.
  */
 AckResponse.prototype.forSending = function () {
-  return {responseType: "AckResponse"};
-};
-module.exports = AckResponse;
+  return {responseType: "AckResponse"}
+}
+module.exports = AckResponse

@@ -1,6 +1,6 @@
 var Arguments = require("./../arguments.js").Arguments,
-    GenericResponse = require('./generic.js').GenericResponse;
-require('./../setimmediate.js');
+  GenericResponse = require('./generic.js').GenericResponse
+require('./../setimmediate.js')
 
 /**
  * The request yielded by a single callback that is to be called by
@@ -12,15 +12,15 @@ require('./../setimmediate.js');
  * themselves.
  */
 function ArgsResponse (args) {
-  this.cbArgs = args;
+  this.cbArgs = args
 }
 
 ArgsResponse.async = function (mr, hostApi) {
-  var resp = new ArgsResponse();
-  resp.mr = mr;
-  resp.hostApi = hostApi;
-  return resp;
-};
+  var resp = new ArgsResponse()
+  resp.mr = mr
+  resp.hostApi = hostApi
+  return resp
+}
 
 /**
  * Handle the response on the client side if it is of the correct
@@ -34,22 +34,22 @@ ArgsResponse.async = function (mr, hostApi) {
  * @return {Boolean} true if we handled it.
  */
 ArgsResponse.maybeHandle = function (msg, request, doneCb) {
-  if (msg.responseType != "ArgsResponse") return false;
+  if (msg.responseType != "ArgsResponse") return false
   if (!request.getCallback()) {
-    doneCb(new Error("No real callback provided on the client."));
-    return true;
+    doneCb(new Error("No real callback provided on the client."))
+    return true
   }
   var cbArgs = new Arguments(msg.args),
-      callArgs = cbArgs.forCalling(),
-      callback = request.getCallback();
+    callArgs = cbArgs.forCalling(),
+    callback = request.getCallback()
 
-  // log.log("Received:", cbArgs.forSending(), "for", {fn: String(callback)});
-  callback.apply(null, callArgs);
-  setImmediate(doneCb);
-  return true;
-};
+  // log.log("Received:", cbArgs.forSending(), "for", {fn: String(callback)})
+  callback.apply(null, callArgs)
+  setImmediate(doneCb)
+  return true
+}
 
-ArgsResponse.prototype = Object.create(GenericResponse.prototype);
+ArgsResponse.prototype = Object.create(GenericResponse.prototype)
 
 /**
  * The callback arguments serialized.
@@ -57,19 +57,21 @@ ArgsResponse.prototype = Object.create(GenericResponse.prototype);
  * @returns {Object} the object to be put through the API.
  */
 ArgsResponse.prototype.forSending = function () {
-  return {responseType: "ArgsResponse",
-          args: this.cbArgs.forSending()};
-};
+  return {
+    responseType: "ArgsResponse",
+    args: this.cbArgs.forSending()
+  }
+}
 
 ArgsResponse.prototype.send = function (sendCb) {
   if (this.mr) {
     // NOTE: ArgsRepsonse for connection cleanups are lazy. The
     // callback of the api call does the actual work of sending the
     // respinse.
-    this.mr.call(sendCb, this.hostApi);
-    return;
+    this.mr.call(sendCb, this.hostApi)
+    return
   }
 
-  sendCb(this.forSending());
-};
-module.exports = ArgsResponse;
+  sendCb(this.forSending())
+}
+module.exports = ArgsResponse

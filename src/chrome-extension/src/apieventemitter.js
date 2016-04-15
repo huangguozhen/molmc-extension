@@ -13,11 +13,11 @@
  * @author Chris Perivolaropoulos
  */
 var util = require("./util"),
-    AckResponse = require('./responses.js').AckResponse,
-    ArgsResponse = require('./responses.js').ArgsResponse,
-    MethodRequest = require('./requests.js').MethodRequest,
-    Arguments = require('./arguments.js').Arguments,
-    log = new (require('./log.js').Log)('apieventemitter');
+  AckResponse = require('./responses.js').AckResponse,
+  ArgsResponse = require('./responses.js').ArgsResponse,
+  MethodRequest = require('./requests.js').MethodRequest,
+  Arguments = require('./arguments.js').Arguments,
+  log = new (require('./log.js').Log)('apieventemitter')
 
 /**
  * Response methods to inject in an api depending on the closing type.
@@ -26,19 +26,19 @@ var closingResponses = {
   callingArguments: function (closingRequest) {
     if (!closingRequest) {
       new MethodRequest(null, this.reverser.path, this.args)
-        .call(null, this.hostApi);
-      return null;
+        .call(null, this.hostApi)
+      return null
     }
 
     if (this.reverser.path == closingRequest.method &&
         JSON.stringify(closingRequest.args.forSending()) ==
         JSON.stringify(this.args.forSending())) {
-      closingRequest.call(null, this.hostApi);
-      this.destroy(true);
-      return new AckResponse();
+      closingRequest.call(null, this.hostApi)
+      this.destroy(true)
+      return new AckResponse()
     }
 
-    return null;
+    return null
   },
 
   /**
@@ -50,50 +50,50 @@ var closingResponses = {
    * @returns {null|ArgsResponse} The response to be sent after the cleanup.
    */
   firstResponse: function (closingRequest) {
-    var fr = this.firstResponseMsg;
+    var fr = this.firstResponseMsg
     if (!fr || fr.responseType != 'ArgsResponse') {
-      return null;
+      return null
     }
 
-    var closingArg = fr.args[0];
+    var closingArg = fr.args[0]
     if (this.reverser.firstArgPath) {
-      closingArg = closingArg[this.reverser.firstArgPath];
+      closingArg = closingArg[this.reverser.firstArgPath]
     }
 
     if (!closingRequest) {
       // Just do your best.
       var mr = new MethodRequest(null, this.reverser.path,
-                                 new Arguments([closingArg, function () {}]));
-      mr.call(null, this.hostApi);
-      return null;
+                                 new Arguments([closingArg, function () {}]))
+      mr.call(null, this.hostApi)
+      return null
     }
 
     if (JSON.stringify(closingArg) ==
         JSON.stringify(closingRequest.args.forSending()[0]) &&
         closingRequest.method == this.reverser.path) {
-      this.destroy(true);
+      this.destroy(true)
       // The request will be called and will call an actual callback.
-      return ArgsResponse.async(closingRequest, this.hostApi);
+      return ArgsResponse.async(closingRequest, this.hostApi)
     }
 
-    return null;
+    return null
   },
 
   // Backwards compatible
   serial: function (closingRequest) {
-    var oldfap = this.reverser.firstArgPath = 'connectionId';
-    return closingResponses.firstResponse(closingRequest);
+    var oldfap = this.reverser.firstArgPath = 'connectionId'
+    return closingResponses.firstResponse(closingRequest)
 
     /* eslint no-unreachable: 0 */
-    this.reverser.firstArgPath = oldfap;
+    this.reverser.firstArgPath = oldfap
   },
 
   default: function (closingRequest) {
     return closingResponses.serial(closingRequest) ||
       closingResponses.firstResponse(closingRequest) ||
-      closingResponses.callingArguments(closingRequest);
+      closingResponses.callingArguments(closingRequest)
   }
-};
+}
 
 /**
  * An Api event emitter or a method with side effects that need
@@ -106,45 +106,45 @@ var closingResponses = {
  * @param {Function} closeCb Call this when closed
  */
 function ApiEventEmitter (methodRequest, reverser, hostApi, closeCb) {
-  var self = this;
-  this.methodName = methodRequest.method;
-  this.reverser = reverser;
-  this.hostApi = hostApi;
-  this.calledClosingRequests = [];
+  var self = this
+  this.methodName = methodRequest.method
+  this.reverser = reverser
+  this.hostApi = hostApi
+  this.calledClosingRequests = []
 
   // Remember the first response
-  this.args = methodRequest.args;
+  this.args = methodRequest.args
   this.args.setLens(function (cb) {
     return function () {
-      var args = [].slice.call(arguments);
-      self.firstResponseMsg = self.firstResponseMsg || args[0];
-      cb.apply(null, args);
-    };
-  });
-  this.methodRequest = methodRequest;
-  log.log("Starting [rev type: " + self.reverser.type + "]: ", methodRequest.forSending());
+      var args = [].slice.call(arguments)
+      self.firstResponseMsg = self.firstResponseMsg || args[0]
+      cb.apply(null, args)
+    }
+  })
+  this.methodRequest = methodRequest
+  log.log("Starting [rev type: " + self.reverser.type + "]: ", methodRequest.forSending())
 
   this.maybeRunCloser = function (closingRequest) {
     if (self.closed) {
-      console.error("Trying to close a closed event emitter");
+      console.error("Trying to close a closed event emitter")
       // THis shouldn't happen
-      return null;
+      return null
     }
 
     // Default to *some* way of handling responses.
     var closingResponseFactory = closingResponses[self.reverser.type] ||
         closingResponses.default,
-        ret = closingResponseFactory.call(self, closingRequest);
+        ret = closingResponseFactory.call(self, closingRequest)
 
     if (ret) {
       log.log("Closing[" + self.reverser.type + "]:", ret,
-              "with", closingRequest);
+              "with", closingRequest)
     }
-    return ret;
-  };
+    return ret
+  }
 
   // Actually trigger the event.
-  this.closeCb = closeCb;
+  this.closeCb = closeCb
 }
 
 ApiEventEmitter.prototype = {
@@ -152,9 +152,9 @@ ApiEventEmitter.prototype = {
    * Actually run the api event emitter.
    */
   fire: function () {
-    log.log("Connected:", this.methodRequest.forSending());
+    log.log("Connected:", this.methodRequest.forSending())
     // No send function, just a hostapi
-    this.methodRequest.call(null, this.hostApi);
+    this.methodRequest.call(null, this.hostApi)
   },
 
   /**
@@ -164,22 +164,22 @@ ApiEventEmitter.prototype = {
    */
   destroy: function (shallow) {
     /* eslint no-unused-vars: 0 */
-    var self = this;
+    var self = this
     // Closing this and the connection will create a loop so don't omit this.
-    if (this.closed) return;
-    if (!shallow) this.maybeRunCloser();
-    this.closed = true;
-    this.closeCb();
-    log.log("Disconected:", this.methodRequest.forSending());
+    if (this.closed) return
+    if (!shallow) this.maybeRunCloser()
+    this.closed = true
+    this.closeCb()
+    log.log("Disconected:", this.methodRequest.forSending())
   },
 
   missingReverseCb: function () {
-    throw new Error("No such method as " + this.methodName);
+    throw new Error("No such method as " + this.methodName)
   },
 
   missingMethodCb: function () {
-    throw new Error("No reverse method for " + this.methodName);
+    throw new Error("No reverse method for " + this.methodName)
   }
-};
+}
 
-module.exports.ApiEventEmitter = ApiEventEmitter;
+module.exports.ApiEventEmitter = ApiEventEmitter

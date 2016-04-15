@@ -8,13 +8,13 @@
 function GenericResponse () {}
 GenericResponse.prototype = {
   send: function (sendCb) {
-    return sendCb(this.forSending());
+    return sendCb(this.forSending())
   },
 
   forSending: function () {
-    throw new Error("Not implemented");
+    throw new Error("Not implemented")
   }
-};
+}
 
 /**
  * Iterate over the response handlers and coose the correct one to
@@ -30,7 +30,7 @@ GenericResponse.prototype = {
 function genericRespHandler (msg, request, done) {
   // Be sure to throw done in the queue.
   function doneCb (err) {
-    done(err);
+    done(err)
   }
 
   var responseTypesArr = [
@@ -38,13 +38,13 @@ function genericRespHandler (msg, request, done) {
     require('./burst.js'),
     require('./arguments.js'),
     require('./ack.js')
-  ];
+  ]
 
   if (!responseTypesArr.some(function (RT) {
-    return RT.maybeHandle(msg, request, doneCb);
+    return RT.maybeHandle(msg, request, doneCb)
   })) {
-    done(new Error("Couldn't handle message: " + JSON.stringify(msg)));
+    done(new Error("Couldn't handle message: " + JSON.stringify(msg)))
   }
 }
-module.exports.GenericResponse = GenericResponse;
-module.exports.genericRespHandler = genericRespHandler;
+module.exports.GenericResponse = GenericResponse
+module.exports.genericRespHandler = genericRespHandler
