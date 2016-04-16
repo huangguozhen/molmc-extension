@@ -1,10 +1,8 @@
 var path = require('path')
 var pathToUrl = require('../../lib/pathToUrl')
 var webpack = require('webpack')
-var gulp = require('gulp')
-var logger = require('../../lib/compileLogger')
 
-var extensionConfig = function(env) {
+module.exports = function(env) {
   var jsSrc = path.resolve('src', 'chrome-extension/src')
   var jsDest = path.resolve('public', 'chrome-extension/bundles')
   var publicPath = pathToUrl('chrome-extension/bundles', '/')
@@ -63,13 +61,3 @@ var extensionConfig = function(env) {
 
   return webpackConfig
 }
-
-var javascriptsTask = function(callback) {
-  webpack(extensionConfig('development'), function(err, stats) {
-    logger(err, stats)
-    callback()
-  })
-}
-
-gulp.task('chrome:scripts', javascriptsTask)
-module.exports = javascriptsTask
