@@ -1,25 +1,24 @@
-let uniqueId = 1;
+var uniqueId = 1
 
-class RetVal {
-  constructor (value, message, context, id) {
-    this.name = null;
-    this.value = value;
-    this.message = message;
-    this.context = context;
-    this.id = id || uniqueId++
-  }
-
-  copy (context) {
-    const ret = new RetVal(this.value, this.message, context, this.id);
-    ret.name = this.name;
+function RetVal(value, message, context, id) {
+  this.name = null
+  this.value = value
+  this.message = message
+  this.context = context
+  this.id = id || uniqueId++
+}
+RetVal.prototype = {
+  copy: function(context) {
+    var ret = new RetVal(this.value, this.message, context, this.id)
+    ret.name = this.name
     return ret
-  }
+  },
+  shortMessage: function(context, state) {
+    var safeContext = {}
 
-  shortMessage (context, state) {
-    let safeContext = {};
     function populateSafelyWith(ctx) {
       Object.getOwnPropertyNames(ctx || {}).forEach(function(p) {
-        safeContext[p] = context[p];
+        safeContext[p] = context[p]
         try {
           JSON.stringify(context[p])
         } catch (e) {
@@ -27,8 +26,8 @@ class RetVal {
         }
       })
     }
-    populateSafelyWith(this.context);
-    populateSafelyWith(context);
+    populateSafelyWith(this.context)
+    populateSafelyWith(context)
     return JSON.stringify({
       name: this.name,
       val: this.value,
@@ -44,7 +43,6 @@ function populatedErrorNames() {
   })
   return errors
 }
-
 var errors = {
   SUCCESS: new RetVal(0, "Success!"),
   UNKNOWN_ERROR: new RetVal(1, "Unknown error."),
@@ -122,6 +120,5 @@ var errors = {
   PRECONFIGURE_DISCONNECT: new RetVal(20241, "Failed to disconnect during preconfiguration"),
   SYNC_RESPONSE: new RetVal(20242, "Got bad response trying to sync.")
 }
-
-module.exports = populatedErrorNames();
+module.exports = populatedErrorNames()
 module.exports.RetVal = RetVal

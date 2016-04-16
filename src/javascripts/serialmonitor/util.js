@@ -1,37 +1,41 @@
+/*
+ * 83
+ */
 function strToUtf8Array(str) {
-  var utf8 = [];
+  var utf8 = []
   for (var i = 0; i < str.length; i++) {
-    var charcode = str.charCodeAt(i);
-    if (charcode < 128) utf8.push(charcode);
+    var charcode = str.charCodeAt(i)
+    if (charcode < 128) utf8.push(charcode)
     else if (charcode < 2048) {
       utf8.push(192 | charcode >> 6, 128 | charcode & 63)
     } else if (charcode < 55296 || charcode >= 57344) {
       utf8.push(224 | charcode >> 12, 128 | charcode >> 6 & 63, 128 | charcode & 63)
     } else {
-      i++;
-      charcode = 65536 + ((charcode & 1023) << 10 | str.charCodeAt(i) & 1023);
+      i++
+      charcode = 65536 + ((charcode & 1023) << 10 | str.charCodeAt(i) & 1023)
       utf8.push(240 | charcode >> 18, 128 | charcode >> 12 & 63, 128 | charcode >> 6 & 63, 128 | charcode & 63)
     }
   }
   return utf8
 }
 
+/* eslint no-unused-vars: 0 */
 function utf8ArrayToStr(array) {
-  let out, i, len, c;
-  // var char2, char3;
-  out = "";
-  len = array.length;
-  i = 0;
+  var out, i, len, c
+  var char2, char3
+  out = ""
+  len = array.length
+  i = 0
   while (i < len) {
-    c = array[i++];
+    c = array[i++]
     if (c >> 7 == 0) {
-      out += String.fromCharCode(c);
+      out += String.fromCharCode(c)
       continue
     }
     if (c >> 6 == 2) {
       continue
     }
-    var extraLength = null;
+    var extraLength = null
     if (c >> 5 == 6) {
       extraLength = 1
     } else if (c >> 4 == 14) {
@@ -46,11 +50,11 @@ function utf8ArrayToStr(array) {
       continue
     }
     if (i + extraLength > len) {
-      var leftovers = array.slice(i - 1);
+      var leftovers = array.slice(i - 1)
       for (; i < len; i++) {
-        if (array[i] >> 6 != 2) break;
+        if (array[i] >> 6 != 2) break
       }
-      if (i != len) continue;
+      if (i != len) continue
       return {
         result: out,
         leftovers: leftovers
@@ -58,25 +62,25 @@ function utf8ArrayToStr(array) {
     }
     var mask = (1 << 8 - extraLength - 1) - 1,
       res = c & mask,
-      nextChar, count;
+      nextChar, count
     for (count = 0; count < extraLength; count++) {
-      nextChar = array[i++];
+      nextChar = array[i++]
       if (nextChar >> 6 != 2) {
         break
       }
       res = res << 6 | nextChar & 63
     }
     if (count != extraLength) {
-      i--;
+      i--
       continue
     }
     if (res <= 65535) {
-      out += String.fromCharCode(res);
+      out += String.fromCharCode(res)
       continue
     }
-    res -= 65536;
+    res -= 65536
     var high = (res >> 10 & 1023) + 55296,
-      low = (res & 1023) + 56320;
+      low = (res & 1023) + 56320
     out += String.fromCharCode(high, low)
   }
   return {
@@ -84,6 +88,5 @@ function utf8ArrayToStr(array) {
     leftovers: []
   }
 }
-
-module.exports.strToUtf8Array = strToUtf8Array;
+module.exports.strToUtf8Array = strToUtf8Array
 module.exports.utf8ArrayToStr = utf8ArrayToStr
