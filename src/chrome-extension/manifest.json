@@ -64,6 +64,5 @@
       "vendorId": 6017
     } ]
   }, "storage", "serial", "usb", "http://localhost:3000/*", "http://localhost/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ],
-  "update_url": "https://clients2.google.com/service/update2/crx",
   "version": "1.0.0"
 }
