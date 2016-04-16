@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 var util = require("./../util")
 
 function opToBin(op, param) {
@@ -7,12 +8,12 @@ function opToBin(op, param) {
   op.forEach(function(bitStruct, index) {
     var bit = bitStruct.instBit % 8,
       byte = Math.floor(bitStruct.instBit / 8)
-      if (bitStruct.bitType == "VALUE") {
-        ret[byte] |= bitStruct.value << bit
-      } else {
-        var val = param[bitStruct.bitType] >> bitStruct.bitNo & 1
-        ret[byte] |= val << bit
-      }
+    if (bitStruct.bitType == "VALUE") {
+      ret[byte] |= bitStruct.value << bit
+    } else {
+      var val = param[bitStruct.bitType] >> bitStruct.bitNo & 1
+      ret[byte] |= val << bit
+    }
   })
   return ret.reverse()
 }
@@ -29,17 +30,17 @@ function intToByteArray(intData, bitNum) {
 function extractOpData(type, op, bin) {
   var retBits = 0,
     littleEndian = bin.slice().reverse(),
-      intData = op.reduce(function(ret, bitStruct, index) {
-        var bit = bitStruct.instBit % 8,
-          byte = Math.floor(bitStruct.instBit / 8),
-            byteMask = 1 << bit
-            retBits = Math.max(retBits, bitStruct.bitNo + 1)
-            if (bitStruct.bitType == type) {
-              return ret | (littleEndian[byte] & byteMask) >> bit << bitStruct.bitNo
-            }
-            return ret
-      }, 0)
-      return intToByteArray(intData, retBits)
+    intData = op.reduce(function(ret, bitStruct, index) {
+      var bit = bitStruct.instBit % 8,
+        byte = Math.floor(bitStruct.instBit / 8),
+        byteMask = 1 << bit
+      retBits = Math.max(retBits, bitStruct.bitNo + 1)
+      if (bitStruct.bitType == type) {
+        return ret | (littleEndian[byte] & byteMask) >> bit << bitStruct.bitNo
+      }
+      return ret
+    }, 0)
+  return intToByteArray(intData, retBits)
 }
 
 function checkMask(mask, cmd) {
