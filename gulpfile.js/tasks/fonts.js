@@ -1,10 +1,10 @@
-var config      = require('../config')
-if(!config.tasks.fonts) return
+var config = require('../config')
+if (!config.tasks.fonts) return
 
 var browserSync = require('browser-sync')
-var changed     = require('gulp-changed')
-var gulp        = require('gulp')
-var path        = require('path')
+var changed = require('gulp-changed')
+var gulp = require('gulp')
+var path = require('path')
 
 var paths = {
   src: path.join(config.root.src, config.tasks.fonts.src, '/**/*.{' + config.tasks.fonts.extensions + '}'),

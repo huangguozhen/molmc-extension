@@ -13,7 +13,7 @@ describe('pathToUrl', function() {
   })
 
   it('normalizes path segments', function() {
-    var joinedPath = pathToUrl('/','//Foo', 'bar', 'baz/')
+    var joinedPath = pathToUrl('/', '//Foo', 'bar', 'baz/')
     assert.equal(joinedPath, '/Foo/bar/baz/')
   })
 })

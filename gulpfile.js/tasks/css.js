@@ -1,15 +1,15 @@
-var config       = require('../config')
-if(!config.tasks.css) return
+var config = require('../config')
+if (!config.tasks.css) return
 
-var gulp         = require('gulp')
-var gulpif       = require('gulp-if')
-var browserSync  = require('browser-sync')
-var sass         = require('gulp-sass')
-var sourcemaps   = require('gulp-sourcemaps')
+var gulp = require('gulp')
+var gulpif = require('gulp-if')
+var browserSync = require('browser-sync')
+var sass = require('gulp-sass')
+var sourcemaps = require('gulp-sourcemaps')
 var handleErrors = require('../lib/handleErrors')
 var autoprefixer = require('gulp-autoprefixer')
-var path         = require('path')
-var cssnano      = require('gulp-cssnano')
+var path = require('path')
+var cssnano = require('gulp-cssnano')
 
 var paths = {
   src: path.join(config.root.src, config.tasks.css.src, '/**/*.{' + config.tasks.css.extensions + '}'),

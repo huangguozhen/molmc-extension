@@ -1,5 +1,5 @@
-var gulp            = require('gulp')
-var gulpSequence    = require('gulp-sequence')
+var gulp = require('gulp')
+var gulpSequence = require('gulp-sequence')
 var getEnabledTasks = require('../lib/getEnabledTasks')
 
 var defaultTask = function(cb) {

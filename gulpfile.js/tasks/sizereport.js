@@ -1,7 +1,8 @@
-var config       = require('../config')
-var gulp         = require('gulp')
+var config = require('../config')
+var gulp = require('gulp')
+/* eslint no-unused-vars: 0 */
 var repeatString = require('../lib/repeatString')
-var sizereport   = require('gulp-sizereport')
+var sizereport = require('gulp-sizereport')
 
 gulp.task('size-report', function() {
   return gulp.src([config.root.dest + '/**/*', '*!rev-manifest.json'])

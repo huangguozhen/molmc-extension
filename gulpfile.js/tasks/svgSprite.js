@@ -1,11 +1,11 @@
-var config      = require('../config')
-if(!config.tasks.svgSprite) return
+var config = require('../config')
+if (!config.tasks.svgSprite) return
 
 var browserSync = require('browser-sync')
-var gulp        = require('gulp')
-var imagemin    = require('gulp-imagemin')
-var svgstore    = require('gulp-svgstore')
-var path        = require('path')
+var gulp = require('gulp')
+var imagemin = require('gulp-imagemin')
+var svgstore = require('gulp-svgstore')
+var path = require('path')
 
 var svgSpriteTask = function() {
 

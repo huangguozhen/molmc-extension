@@ -1,11 +1,11 @@
 var compress = require('compression')
-var config   = require('../config')
-var express  = require('express')
-var gulp     = require('gulp')
-var gutil    = require('gulp-util')
-var logger   = require('morgan')
-var open     = require('open')
-var path     = require('path')
+var config = require('../config')
+var express = require('express')
+var gulp = require('gulp')
+var gutil = require('gulp-util')
+var logger = require('morgan')
+var open = require('open')
+var path = require('path')
 
 var settings = {
   root: path.resolve(process.cwd(), config.root.dest),

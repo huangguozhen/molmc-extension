@@ -1,9 +1,9 @@
 var config = require('../config')
-if(!config.tasks.js) return
+if (!config.tasks.js) return
 
-var path            = require('path')
-var pathToUrl       = require('./pathToUrl')
-var webpack         = require('webpack')
+var path = require('path')
+var pathToUrl = require('./pathToUrl')
+var webpack = require('webpack')
 var webpackManifest = require('./webpackManifest')
 
 module.exports = function(env) {
@@ -37,7 +37,7 @@ module.exports = function(env) {
     }
   }
 
-  if(env === 'development') {
+  if (env === 'development') {
     webpackConfig.devtool = 'inline-source-map'
 
     // Create new entries object with webpack-hot-middleware added
@@ -49,29 +49,30 @@ module.exports = function(env) {
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin())
   }
 
-  if(env !== 'test') {
+  if (env !== 'test') {
     // Karma doesn't need entry points or output settings
     webpackConfig.entry = config.tasks.js.entries
 
-    webpackConfig.output= {
+    webpackConfig.output = {
       path: path.normalize(jsDest),
       filename: filenamePattern,
       publicPath: publicPath
     }
 
-    if(config.tasks.js.extractSharedJs) {
+    if (config.tasks.js.extractSharedJs) {
       // Factor out common dependencies into a shared.js
       webpackConfig.plugins.push(
         new webpack.optimize.CommonsChunkPlugin({
           name: 'shared',
-          filename: filenamePattern,
+          filename: filenamePattern
         })
       )
     }
   }
 
-  if(env === 'production') {
-    if(rev) {
+  if (env === 'production') {
+    if (rev) {
+      /* eslint new-cap: 0 */
       webpackConfig.plugins.push(new webpackManifest(publicPath, config.root.dest))
     }
     webpackConfig.plugins.push(
