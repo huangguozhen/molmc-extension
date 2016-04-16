@@ -65,7 +65,7 @@ var extensionConfig = function(env) {
 }
 
 var javascriptsTask = function(callback) {
-  webpack(extensionConfig('production'), function(err, stats) {
+  webpack(extensionConfig('development'), function(err, stats) {
     logger(err, stats)
     callback()
   })
