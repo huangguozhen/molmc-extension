@@ -9,7 +9,7 @@
   "scripts": {
     "start": "gulp",
     "gulp": "gulp",
-    "build:chrome": "gulp chrome",
+    "build:chrome": "gulp chrome:dev",
     "development": "gulp",
     "production": "gulp production",
     "deploy": "gulp deploy",
