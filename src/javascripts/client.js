@@ -1,21 +1,20 @@
 (function(global) {
-  /* eslint no-unused-vars: 0 */
   // var protocols = require("./backend/protocols.js").protocols,
-  var util = require("./backend/util.js"),
-    settings = require("./backend/settings.js"),
-    defaultSettings = require("./default.js").settings,
-    hexutil = require("./backend/hexparser.js"),
-    scheduler = require("./backend/scheduler.js"),
-    avrdudeconf = require("./backend/avrdudeconf.js"),
+  //   util = require("./backend/util.js"),
+  //   settings = require("./backend/settings.js"),
+  //   defaultSettings = require("./default.js").settings,
+  //   hexutil = require("./backend/hexparser.js"),
+  //   avrdudeconf = require("./backend/avrdudeconf.js"),
+  //   status = require("./backend/status.js"),
+  //   hexfile = require("./backend/hexfile.js"),
+  //   base64 = require("./backend/base64.js"),
+  //   api = require("./api.js"),
+  //   killFlashButton = require("./killflash.js"),
+  var scheduler = require("./backend/scheduler.js"),
     Event = require("./event.js").Event,
     errno = require("./backend/errno.js"),
-    status = require("./backend/status.js"),
-    hexfile = require("./backend/hexfile.js"),
-    base64 = require("./backend/base64.js"),
     logger = require("./backend/logging.js").getLog,
     wrapper = require("./wrapper.js"),
-    api = require("./api.js"),
-    killFlashButton = require("./killflash.js"),
     asAvailable = require("./appavailability.js").asAvailable,
     SerialMonitor = require("./serialmonitor/monitor.js").Monitor
 
@@ -60,6 +59,7 @@
     serialRead: function(port, baudrate, readCb, connectErrorCb) {
       var self = this
 
+      /* eslint no-unused-vars: 0 */
       function handleClose(err) {
         var success = err.id == errno.SUCCESS.id,
           error = !success,
@@ -87,118 +87,6 @@
       })
       this.serialMonitor.onClose.addListener(handleClose)
     },
-    flashBootloader: function(device, protocol, communication, speed, force, delay, high_fuses, low_fuses, extended_fuses, unlock_bits, lock_bits, mcu, cb, _extraConfig) {
-      function toint(hex) {
-        return hex ? Number.parseInt(hex.substring(2), 16) : null
-      }
-      var _ = null,
-        controlBits = {
-          lfuse: toint(low_fuses),
-          efuse: toint(extended_fuses),
-          lock: toint(unlock_bits),
-          hfuse: toint(high_fuses)
-        },
-        extraConfig = settings.toSettings(_extraConfig).child({
-          controlBits: controlBits,
-          cleanControlBits: {
-            lock: toint(lock_bits)
-          },
-          chipErase: true
-        })
-      var p = new hexfile.Parser(this.hexString),
-        data = p.data()
-      if (data === null) {
-        cb("extension", p.lastError)
-        return
-      }
-      data.defaultByte = 255
-      this.flashWithProgrammer(device, data, _, protocol, communication, speed, force, delay, mcu, cb, extraConfig)
-    },
-    flashWithProgrammer: function(device, code, maxsize, protocol, communication, speed, force, delay, mcu, cb, _extraConfig) {
-      var extraConfig = settings.toSettings(_extraConfig).child({
-        avoidTwiggleDTR: true,
-        confirmPages: true,
-        readSwVersion: true,
-        chipErase: true,
-        skipSignatureCheck: force == "true",
-        communication: communication || "usb",
-        dryRun: window.dryRun
-      })
-      this.flash(device, code, maxsize, protocol, false, speed, mcu, cb, extraConfig)
-    },
-    // flash: function(device, code, maxsize, protocol, disable_flushing, speed, mcu, cb, _extraConfig) {
-    //   this.log.log("Flashing " + device)
-    //   if (typeof code === "string") {
-    //     var p = new base64.Parser(code, 0, maxsize)
-    //     code = p.data()
-    //     if (code === null) {
-    //       cb("extension-client", p.lastError.value)
-    //       return
-    //     }
-    //   }
-    //   var from = null,
-    //     self = this,
-    //     config = settings.toSettings(_extraConfig).child({
-    //       api: this.api,
-    //       maxsize: Number(maxsize),
-    //       protocol: protocol,
-    //       disableFlushing: disable_flushing && disable_flushing != "false",
-    //       speed: Number(speed),
-    //       mcu: mcu,
-    //       avrdude: avrdudeconf.getMCUConf(mcu)
-    //     }).parent(defaultSettings),
-    //     finishCallback = function() {
-    //       var pluginReturnValue = 0
-    //       self.log.log("Flash success")
-    //       cb(from, pluginReturnValue)
-    //       self.transaction = null
-    //     },
-    //     errorCallback = function(id, msg) {
-    //       scheduler.setTimeout(function() {
-    //         self.transaction = null
-    //         var warnOrError = id >= defaultSettings.get("warningReturnValueRange")[0] && id <= defaultSettings.get("warningReturnValueRange")[1] ? 1 : 0
-    //         self.errorCallback("extension-client", msg, warnOrError)
-    //       })
-    //       self.log.log("Flash fail.")
-    //       self.lastFlashResult = msg
-    //       self.transaction = null
-    //       cb(from, id)
-    //     },
-    //     messageCallback = function(s) {
-    //       if (s.id == status.BLOCKING_STATES.id) {
-    //         scheduler.setTimeout(function() {
-    //           self.sendUiMessage(s.toCrazyLog())
-    //         })
-    //       }
-    //       var msg = null
-    //       if (!(s.id != status.LEONARDO_RESET_START.id && s.priority > 0 && !config.get("statusLog"))) {
-    //         msg = s.toString()
-    //       }
-    //       if (config.get("killButton")) {
-    //         msg = (msg || "Flashing device...") + killFlashButton(self.transaction)
-    //       }
-    //       if (msg) self.sendUiMessage(msg)
-    //     }
-
-    //   function doflash() {
-    //     var dodoFlash = function() {
-    //       self.log.log("Code length", code.length || code.data.length, "Protocol:", protocols, "Device:", device)
-    //       self.transaction.flash(device, code.squashed())
-    //     }
-    //     self.transaction = new (protocols[config.get("communication") || "serial"][protocol])(config.obj(), finishCallback, errorCallback)
-    //     self.transaction.onStatusChange.addListener(messageCallback)
-    //     if (self.transaction.destroyOtherConnections) {
-    //       self.transaction.destroyOtherConnections(device, dodoFlash)
-    //       return
-    //     }
-    //     dodoFlash()
-    //   }
-    //   if (self.transaction) {
-    //     self.transaction.cleanup(doflash)
-    //     return
-    //   }
-    //   doflash()
-    // },
     cachingGetDevices: function(cb) {
       var self = this
       if (!self._cachedPorts) {
@@ -326,6 +214,6 @@
       if (typeof verbosity === "number") global.verbosity = verbosity
     }
   }
-  global.CodebenderPlugin = Plugin
-  module.exports = global.CodebenderPlugin
+  global.IntoRobotPlugin = Plugin
+  module.exports = global.IntoRobotPlugin
 }).call(this, typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})

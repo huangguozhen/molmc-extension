@@ -12,12 +12,12 @@
     userSettings = {
       statusLog: false,
       killButton: false,
-      verbosity: 5
+      verbosity: 0
     },
     developerSettings = {
       statusLog: true,
       killButton: true,
-      verbosity: 5
+      verbosity: 0
     }
 
   function getDefaultSettings() {
