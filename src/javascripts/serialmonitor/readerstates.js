@@ -10,7 +10,7 @@ function State(reader, cons) {
   this.cons = cons
   this.destroyed = false
   this.handler = function() {
-    if (this.destroyed) return null
+    if (self.destroyed) return null
     self.cons.cdr.destroy()
     self.cons.cdr = NilCons
     if (!self._handler) return null
