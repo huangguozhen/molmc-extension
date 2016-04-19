@@ -30,7 +30,7 @@
 
     getHostId: function(cb, cfg) {
       cfg = cfg || {}
-      var appIds = cfg.ids || global.appIds || ["jommgdhcpkjoikkjcnpafeofedlfphfb", "degcgnklllnnbfnknpelaclgiclcaioe", global.APP_ID],
+      var appIds = cfg.ids || global.appIds || ["liifijdapbinabgcopgmodjkbgmbbdoi", "degcgnklllnnbfnknpelaclgiclcaioe", global.APP_ID],
         car = appIds[0],
         cdr = appIds.slice(1),
         self = this
