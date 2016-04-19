@@ -168,7 +168,8 @@ MethodRequest.maybeHandle = function (msg, connections, hostApi, sendRespRaw) {
 
       // Everything went well.
       argsResp.send(_sendRespRaw)
-    }, methodArgs = new Arguments(msg.args, sendArgsAsResponse),
+    },
+    methodArgs = new Arguments(msg.args, sendArgsAsResponse),
     methodCb = util.path2callable(hostApi, msg.method)
 
   // Bad path received.
