@@ -64,5 +64,5 @@
       "vendorId": 6017
     } ]
   }, "storage", "serial", "usb", "http://localhost:3000/*", "http://localhost/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ],
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
