@@ -19,50 +19,6 @@
   "default_locale": "en",
   "minimum_chrome_version": "41",
   "name": "__MSG_appName__",
-  "permissions": [ {
-    "usbDevices": [ {
-      "productId": 8451,
-      "vendorId": 1003
-    },{
-      "productId": 8452,
-      "vendorId": 1003
-    },{
-      "productId": 8454,
-      "vendorId": 1003
-    },{
-      "productId": 8455,
-      "vendorId": 1003
-    },{
-      "productId": 8464,
-      "vendorId": 1003
-    },{
-      "productId": 8465,
-      "vendorId": 1003
-    },{
-      "productId": 8512,
-      "vendorId": 1003
-    },{
-      "productId": 8513,
-      "vendorId": 1003
-    },{
-      "productId": 24592,
-      "vendorId": 1027
-    },{
-      "productId": 24577,
-      "vendorId": 1027
-    },{
-      "productId": 1500,
-      "vendorId": 5824
-    },{
-      "productId": 51124,
-      "vendorId": 1003
-    },{
-      "productId": 2351,
-      "vendorId": 5824
-    },{
-      "productId": 3231,
-      "vendorId": 6017
-    } ]
-  }, "storage", "serial", "usb", "http://localhost:3000/*", "http://localhost/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ],
+  "permissions": ["storage", "serial", "usb", "http://localhost:3000/*", "http://localhost/*", "http://*.intorobot.com/*", "https://*.intorobot.com/*", "http://intorobot.com/*", "https://intorobot.com/*" ],
   "version": "1.0.1"
 }
