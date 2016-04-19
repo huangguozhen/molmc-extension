@@ -1,6 +1,3 @@
-/*
- * 36
- */
 /* eslint no-unused-vars: 0 */
 var setupClient = require("./../chrome-extension/src/client.js").setupClient,
   abstractAvailable = require("./availability.js").abstractAvailable,

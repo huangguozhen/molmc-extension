@@ -1,6 +1,3 @@
-/*
- * 16
- */
 /* eslint no-unused-vars: 0 */
 var MethodRequest = require("./requests.js").MethodRequest,
   ClientConnection = require("./clientconnection.js").ClientConnection,

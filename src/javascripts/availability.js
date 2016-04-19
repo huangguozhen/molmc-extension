@@ -1,6 +1,3 @@
-/*
- * 37
- */
 /* eslint no-unused-vars: 0 */
 var Event = require("./event.js").Event
 var SHUTDOWN = 0,
